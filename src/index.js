@@ -1,4 +1,7 @@
 import { Command } from 'commander';
+
+import getFilesDiff from "./getFilesDiff.js";
+
 const program = new Command();
 
 export default () => {
@@ -7,7 +10,11 @@ export default () => {
         .description('Compares two configuration files and shows a difference.')
         .version('0.0.1')
         .arguments('<filepath1> <filepath2>')
-        .option('-f, --format <type>', 'output format');
+        .option('-f, --format <type>', 'output format')
+        .action((filepath1, filepath2) => {
+            const diff = getFilesDiff(filepath1, filepath2);
+            console.log(diff);
+        });
 
     if(process.argv.includes('--help') || process.argv.includes('-h')) {
         console.log(program.help());
