@@ -1,0 +1,5 @@
+extends: 'airbnb-base-1'
+
+ecmaVersion: latest
+
+no-console: 1

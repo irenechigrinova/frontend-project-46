@@ -11,3 +11,5 @@ export const safelyParseJson = (str) => {
 };
 
 export const sortStrings = (a, b) => a.localeCompare(b);
+
+export const getFileExtension = (filepath) => path.extname(filepath).substring(1);

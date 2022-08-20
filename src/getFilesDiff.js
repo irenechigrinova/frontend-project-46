@@ -1,11 +1,14 @@
 import { readFileSync } from 'node:fs';
 import uniq from 'lodash/uniq.js';
 
-import { getFullPath, safelyParseJson, sortStrings } from './helpers.js';
+import { getFullPath, sortStrings, getFileExtension } from './helpers.js';
+import getParsedData from './parsers/index.js';
 
 export default (filepath1, filepath2) => {
-  const content1 = safelyParseJson(readFileSync(getFullPath(filepath1), { encoding: 'utf8' }));
-  const content2 = safelyParseJson(readFileSync(getFullPath(filepath2), { encoding: 'utf8' }));
+  console.log(getFileExtension(filepath1));
+  const content1 = getParsedData(readFileSync(getFullPath(filepath1), { encoding: 'utf8' }), getFileExtension(filepath1));
+  const content2 = getParsedData(readFileSync(getFullPath(filepath2), { encoding: 'utf8' }), getFileExtension(filepath1));
+  console.log(content1);
 
   const currentKeys = uniq([...Object.keys(content1), ...Object.keys(content2)]).sort(sortStrings);
   const result = currentKeys.reduce((acc, key) => {
