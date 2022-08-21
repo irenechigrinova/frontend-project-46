@@ -19,8 +19,7 @@
   "type": "module",
   "dependencies": {
     "commander": "^9.4.0",
-    "js-yaml": "^4.1.0",
-    "lodash": "^4.17.21"
+    "js-yaml": "^4.1.0"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",

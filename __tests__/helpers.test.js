@@ -1,6 +1,6 @@
 import * as path from 'path';
 import {
-  getFullPath, safelyParseJson, sortStrings, getFileExtension, isObject,
+  getFullPath, safelyParseJson, sortStrings, getFileExtension, isObject, uniq,
 } from '../src/helpers.js';
 
 describe('helpers tests', () => {
@@ -41,5 +41,12 @@ describe('helpers tests', () => {
     expect(isObject({})).toBe(true);
     expect(isObject(() => {})).toBe(false);
     expect(isObject(undefined)).toBe(false);
+  });
+
+  it('should test uniq func', () => {
+    expect(uniq([1, 2])).toEqual([1, 2]);
+    expect(uniq([1, 2, 2])).toEqual([1, 2]);
+    expect(uniq([2, 2, 2])).toEqual([2]);
+    expect(uniq([])).toEqual([]);
   });
 });

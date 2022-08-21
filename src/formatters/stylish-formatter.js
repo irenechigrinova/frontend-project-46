@@ -18,12 +18,14 @@ const setClosingBracket = (nextLevel, currentLevel) => {
   return result;
 };
 
-const valueToString = (value, level) => {
+const primitiveToString = (value) => {
   if (typeof value === 'undefined') return '';
   if (!isObject(value) && !Array.isArray(value)) return value;
-  if (Array.isArray(value)) {
-    return JSON.stringify(value).replace(/"/g, '').split(',').join(', ');
-  }
+  return JSON.stringify(value).replace(/"/g, '').split(',').join(', ');
+};
+
+const valueToString = (value, level) => {
+  if (!isObject(value)) return primitiveToString(value);
 
   const result = Object.keys(value).reduce((acc, key) => {
     const spaces = setSpaces(level + 1);
@@ -31,6 +33,7 @@ const valueToString = (value, level) => {
     return [...acc, `${spaces}${key}: ${value[key]}`];
   }, ['{']);
   result.push(`  ${setClosingBracket(level - 1, level)[0]}`);
+
   return result.join('\n');
 };
 

@@ -1,6 +1,4 @@
-import uniq from 'lodash/uniq.js';
-
-import { isObject, sortStrings } from './helpers.js';
+import { isObject, sortStrings, uniq } from './helpers.js';
 
 export default (content1, content2) => {
   function buildFlatTree(obj1, obj2, level) {
@@ -24,19 +22,12 @@ export default (content1, content2) => {
           break;
         case typeof obj1[key] !== 'undefined' && typeof obj2[key] !== 'undefined':
           acc.push({
-            key,
-            value: obj1[key],
-            value2: obj2[key],
-            type: 'changed',
-            level,
+            key, value: obj1[key], value2: obj2[key], type: 'changed', level,
           });
           break;
         default:
           acc.push({
-            key,
-            value: obj1[key] ?? obj2[key],
-            type: typeof obj1[key] !== 'undefined' ? '-' : '+',
-            level,
+            key, value: obj1[key] ?? obj2[key], type: typeof obj1[key] !== 'undefined' ? '-' : '+', level,
           });
       }
       return acc;
