@@ -1,17 +1,35 @@
+import { readFileSync } from 'node:fs';
+import * as path from 'path';
+
 import getFilesDiff from '../src/getFilesDiff.js';
+import { safelyParseJson } from '../src/helpers.js';
 
 describe('getFilesDiff tests', () => {
-  it('should test simple json data', () => {
-    const result = '{\n\t- follow: false\n\t  host: hexlet.io\n\t- proxy: 123.234.53.22\n\t- timeout: 50\n\t+ timeout: 20\n\t+ verbose: true\n}';
-    const diff = getFilesDiff('src/test-data/file1.json', 'src/test-data/file2.json');
-    console.log(diff);
+  it('should test plain json data with stylish', () => {
+    const content = readFileSync(`${path.resolve()}/__fixtures__/plain-result.json`, { encoding: 'utf8' });
+    const result = safelyParseJson(content).value;
+    const diff = getFilesDiff('src/test-data/file1.json', 'src/test-data/file2.json', 'stylish');
     expect(diff).toEqual(result);
   });
 
-  it('should test simple yml data', () => {
-    const result = '{\n\t  ecmaVersion: latest\n\t- extends: airbnb-base\n\t+ extends: airbnb-base-1\n\t- no-console: 0\n\t+ no-console: 1\n}';
-    const diff = getFilesDiff('src/test-data/file1.yml', 'src/test-data/file2.yaml');
-    console.log(diff);
+  it('should test nested json data with stylish', () => {
+    const content = readFileSync(`${path.resolve()}/__fixtures__/nested-result.json`, { encoding: 'utf8' });
+    const result = safelyParseJson(content).value;
+    const diff = getFilesDiff('src/test-data/file1-1.json', 'src/test-data/file2-2.json', 'stylish');
+    expect(diff).toEqual(result);
+  });
+
+  it('should test plain yaml data with stylish', () => {
+    const content = readFileSync(`${path.resolve()}/__fixtures__/yaml-plain-result.json`, { encoding: 'utf8' });
+    const result = safelyParseJson(content).value;
+    const diff = getFilesDiff('src/test-data/file1.yml', 'src/test-data/file2.yaml', 'stylish');
+    expect(diff).toEqual(result);
+  });
+
+  it('should test nested yaml data with stylish', () => {
+    const content = readFileSync(`${path.resolve()}/__fixtures__/yaml-nested-result.json`, { encoding: 'utf8' });
+    const result = safelyParseJson(content).value;
+    const diff = getFilesDiff('src/test-data/file1-1.yml', 'src/test-data/file2-2.yaml', 'stylish');
     expect(diff).toEqual(result);
   });
 });

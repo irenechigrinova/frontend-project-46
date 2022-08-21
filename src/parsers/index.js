@@ -9,6 +9,6 @@ export default (content, type) => {
     case 'yaml':
       return yamlParser(content);
     default:
-      throw new Error('Type is unknown');
+      throw new Error('Format type is unknown');
   }
 };

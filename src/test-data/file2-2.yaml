@@ -1,0 +1,16 @@
+env:
+  node: true
+  jest: false
+
+extends:
+  - 'airbnb-base-1'
+
+parserOptions:
+  ecmaVersion: latest
+
+rules:
+  no-console: 1
+  import/extensions:
+    - error
+    - ignorePackages
+  no-underscore-dangle: [2, { "allow": ["__filename", "__dirname"] }]

@@ -1,0 +1,3 @@
+{
+  "value": "{\n    ecmaVersion: latest\n  - extends: airbnb-base\n  + extends: airbnb-base-1\n  - no-console: 0\n  + no-console: 1\n}"
+}
