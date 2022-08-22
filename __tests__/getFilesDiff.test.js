@@ -16,6 +16,14 @@ describe('getFilesDiff tests', () => {
     ['file1-1.json', 'file2-2.json', 'nested-result.json', 'stylish'],
     ['file1.yml', 'file2.yaml', 'yaml-plain-result.json', 'stylish'],
     ['file1-1.yml', 'file2-2.yaml', 'yaml-nested-result.json', 'stylish'],
+    ['file1.json', 'file2.json', 'plain-result-plain.json', 'plain'],
+    ['file1-1.json', 'file2-2.json', 'nested-result-plain.json', 'plain'],
+    ['file1.yml', 'file2.yaml', 'yaml-plain-result-plain.json', 'plain'],
+    ['file1-1.yml', 'file2-2.yaml', 'yaml-nested-result-plain.json', 'plain'],
+    ['file1.json', 'file2.json', 'plain-result-json.json', 'json'],
+    ['file1-1.json', 'file2-2.json', 'nested-result-json.json', 'json'],
+    ['file1.yml', 'file2.yaml', 'yaml-plain-result-json.json', 'json'],
+    ['file1-1.yml', 'file2-2.yaml', 'yaml-nested-result-json.json', 'json'],
   ])('should test getFilesDiff for %s and %s with %s formatter', async (testFile1, testFile2, expected, format) => {
     const content = readFileSync(getPathToFixture('results', expected), { encoding: 'utf8' });
     const result = safelyParseJson(content).value;
