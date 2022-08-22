@@ -10,5 +10,6 @@ export default (filepath1, filepath2, format) => {
   const content2 = getParsedData(readFileSync(getFullPath(filepath2), { encoding: 'utf8' }), getFileExtension(filepath1));
 
   const diffTree = buildDiffTree(content1, content2);
-  return formatTree(diffTree, format);
+  console.log(JSON.parse(JSON.stringify(diffTree)));
+  // return formatTree(diffTree, format);
 };

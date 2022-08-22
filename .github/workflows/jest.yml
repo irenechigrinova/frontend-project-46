@@ -1,4 +1,4 @@
-name: JEST
+name: Jest
 on: push
 jobs:
   build:
@@ -9,3 +9,9 @@ jobs:
         run: npm ci
       - name: Run tests
         run: npm run test
+      - name: Code coverage
+        uses: paambaati/codeclimate-action@v3.0.0
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        with:
+          coverageCommand: npm run test:coverage
