@@ -1,26 +1,14 @@
-import { Command } from 'commander';
+import { readFileSync } from 'node:fs';
 
-import getFilesDiff from './getFilesDiff.js';
+import { getFullPath, getFileExtension } from './helpers.js';
+import getParsedData from './parsers/index.js';
+import buildDiffTree from './buildDiffTree.js';
+import formatTree from './formatters/index.js';
 
-const program = new Command();
+export default (filepath1, filepath2, format) => {
+  const content1 = getParsedData(readFileSync(getFullPath(filepath1), { encoding: 'utf8' }), getFileExtension(filepath1));
+  const content2 = getParsedData(readFileSync(getFullPath(filepath2), { encoding: 'utf8' }), getFileExtension(filepath1));
 
-export default () => {
-  program
-    .name('gendiff')
-    .description('Compares two configuration files and shows a difference.')
-    .version('0.0.1')
-    .arguments('<filepath1> <filepath2>')
-    .option('-f, --format <type>', 'output format')
-    .action((filepath1, filepath2) => {
-      const diff = getFilesDiff(filepath1, filepath2, program.opts().format || 'stylish');
-      console.log(diff);
-    });
-
-  if (process.argv.includes('--help') || process.argv.includes('-h')) {
-    console.log(program.help());
-  } else if (process.argv.includes('--version') || process.argv.includes('-V')) {
-    console.log(program.version());
-  } else {
-    program.parse();
-  }
+  const diffTree = buildDiffTree(content1, content2);
+  return formatTree(diffTree, format);
 };
