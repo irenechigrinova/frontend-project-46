@@ -28,11 +28,11 @@ const valueToString = (value, level) => {
   if (!isObject(value)) return primitiveToString(value);
 
   const result = Object.keys(value).reduce((acc, key) => {
-    const spaces = setSpaces(level + 1);
+    const spaces = `  ${setSpaces(level + 1)}`;
     if (isObject(value[key])) return [...acc, `${spaces}${key}: ${valueToString(value[key], level + 1)}`];
     return [...acc, `${spaces}${key}: ${value[key]}`];
   }, ['{']);
-  result.push(`  ${setClosingBracket(level - 1, level)[0]}`);
+  result.push(`    ${setClosingBracket(level - 1, level)[0]}`);
 
   return result.join('\n');
 };
@@ -48,7 +48,7 @@ export default (diffTree) => {
     const value2 = valueToString(currentNode.value2, currentNode.level);
 
     if (currentNode.type === 'nested') {
-      result.push(`${spaces}  ${currentNode.key} {`);
+      result.push(`${spaces}  ${currentNode.key}: {`);
     } else if (currentNode.type === 'none') {
       result.push(`${spaces}  ${currentNode.key}: ${value1}`);
     } else if (currentNode.type === 'changed') {
