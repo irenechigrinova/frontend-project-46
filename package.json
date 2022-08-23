@@ -8,7 +8,7 @@
     "test:coverage": "cross-env NODE_OPTIONS=--experimental-vm-modules npx jest --coverage"
   },
   "bin": {
-    "gerdiff": "bin/gendiff.js"
+    "gendiff": "bin/gendiff.js"
   },
   "repository": {
     "type": "git",
