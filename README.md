@@ -33,11 +33,28 @@ make lint
 #test
 make test
 
-# run via make
-make brain-even
-
-# run via nodejs
-node bin/gendiff.js
+# run as executable
+gendiff [options] [params]
 ```
 
 ### DEMOS
+Getting help and version
+https://asciinema.org/a/epIf6HJifngfWL7A58FuNkaFe
+
+Getting diff for json files in stylish format
+https://asciinema.org/a/ZmL4JDcuM5J1NItAonFQPlypE
+
+Getting diff for json files in plain format
+https://asciinema.org/a/8YpMsFlZKOllnwWwuhKtO9RQN
+
+Getting diff for json files in json format
+https://asciinema.org/a/CSIWDnEgwx8skVAos5qFJibXw
+
+Getting diff for yaml files in stylish format
+https://asciinema.org/a/AuhPS1YddW7JLDL9LhtH1cqrg
+
+Getting diff for yaml files in plain format
+https://asciinema.org/a/9zZ7at7ijjw3Xq5C7cd4bWxEF
+
+Getting diff for yaml files in json format
+https://asciinema.org/a/g3BER56d1Erqg99xOUc4Q39za
