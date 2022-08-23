@@ -1,15 +1,23 @@
 import { isObject } from '../helpers.js';
 
+const setValue = (value) => {
+  if (isObject(value) || Array.isArray(value)) return '[complex value]';
+  if (typeof value === 'string') return `'${value}'`;
+  return value;
+};
+
 export default (diffTree) => {
-  const currentPath = [];
+  let currentPath = [];
 
   return diffTree.reduce((result, item, index) => {
-    const value1 = isObject(item.value) || Array.isArray(item.value) ? '[complex value]' : `'${item.value}'`;
-    const value2 = isObject(item.value2) || Array.isArray(item.value2) ? '[complex value]' : `'${item.value2}'`;
-    const propName = item.level > 0 ? `${currentPath.join('.')}.${item.key}` : item.key;
-    const nextLevel = diffTree[index + 1]?.level ?? null;
+    if (item.level === 0) currentPath = [item.key];
 
-    if (item.type === 'nested') {
+    const value1 = setValue(item.value);
+    const value2 = setValue(item.value2);
+    const propName = item.level > 0 ? `${currentPath.join('.')}.${item.key}` : item.key;
+    const nextItemLevel = diffTree[index + 1]?.level ?? null;
+
+    if (item.type === 'nested' && !currentPath.includes(item.key)) {
       currentPath.push(item.key);
     } else if (item.type === 'changed') {
       result.push(`Property '${propName}' was updated. From ${value1} to ${value2}`);
@@ -18,7 +26,7 @@ export default (diffTree) => {
     } else if (item.type === '-') {
       result.push(`Property '${propName}' was removed`);
     }
-    if (nextLevel < item.level) {
+    if (nextItemLevel < item.level) {
       currentPath.pop();
     }
     return result;

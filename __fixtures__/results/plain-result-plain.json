@@ -1,3 +1,3 @@
 {
-  "value": "Property 'follow' was removed\nProperty 'proxy' was removed\nProperty 'timeout' was updated. From '50' to '20'\nProperty 'verbose' was added with value: 'true'"
+  "value": "Property 'follow' was removed\nProperty 'proxy' was removed\nProperty 'timeout' was updated. From 50 to 20\nProperty 'verbose' was added with value: true"
 }

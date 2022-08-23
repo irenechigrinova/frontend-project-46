@@ -2,17 +2,16 @@ import { isObject } from '../helpers.js';
 
 const SPACE = ' ';
 const STANDARD_SPACES_NUM = 2;
+const NEXT_LEVEL_SPACE = 4;
 
 const setSpaces = (level) => {
-  let spaces = SPACE.repeat(STANDARD_SPACES_NUM + level * STANDARD_SPACES_NUM);
-  if (level > 0) spaces += SPACE.repeat(STANDARD_SPACES_NUM * level);
-
-  return spaces;
+  if (level === 0) return SPACE.repeat(STANDARD_SPACES_NUM);
+  return SPACE.repeat(STANDARD_SPACES_NUM + level * NEXT_LEVEL_SPACE);
 };
 
-const setClosingBracket = (nextLevel, currentLevel) => {
+const setClosingBracket = (prevLevel, currentLevel) => {
   const result = [];
-  for (let i = currentLevel; i > nextLevel; i -= 1) {
+  for (let i = currentLevel; i > prevLevel; i -= 1) {
     result.push(`  ${setSpaces(i - 1)}}`);
   }
   return result;
@@ -27,12 +26,13 @@ const primitiveToString = (value) => {
 const valueToString = (value, level) => {
   if (!isObject(value)) return primitiveToString(value);
 
+  const spaces = setSpaces(level);
+
   const result = Object.keys(value).reduce((acc, key) => {
-    const spaces = `  ${setSpaces(level + 1)}`;
-    if (isObject(value[key])) return [...acc, `${spaces}${key}: ${valueToString(value[key], level + 1)}`];
-    return [...acc, `${spaces}${key}: ${value[key]}`];
+    if (isObject(value[key])) return [...acc, `  ${spaces}${key}: ${valueToString(value[key], level + 1)}`];
+    return [...acc, `  ${spaces}${key}: ${value[key]}`];
   }, ['{']);
-  result.push(`    ${setClosingBracket(level - 1, level)[0]}`);
+  result.push(`  ${setSpaces(level - 1)}}`);
 
   return result.join('\n');
 };
@@ -44,8 +44,8 @@ export default (diffTree) => {
     const nextLevel = diffTree[i + 1]?.level ?? null;
     const spaces = setSpaces(currentNode.level);
 
-    const value1 = valueToString(currentNode.value, currentNode.level);
-    const value2 = valueToString(currentNode.value2, currentNode.level);
+    const value1 = valueToString(currentNode.value, currentNode.level + 1);
+    const value2 = valueToString(currentNode.value2, currentNode.level + 1);
 
     if (currentNode.type === 'nested') {
       result.push(`${spaces}  ${currentNode.key}: {`);
