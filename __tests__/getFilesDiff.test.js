@@ -2,8 +2,8 @@ import { readFileSync } from 'node:fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 
-import getDiff from '../src/index.js';
 import { safelyParseJson } from '../src/helpers.js';
+import getDiff from '../src/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
