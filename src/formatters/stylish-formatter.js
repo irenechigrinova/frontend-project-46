@@ -9,12 +9,10 @@ const setSpaces = (level) => {
   return SPACE.repeat(STANDARD_SPACES_NUM + level * NEXT_LEVEL_SPACE);
 };
 
-const setClosingBracket = (prevLevel, currentLevel) => {
-  const result = [];
-  for (let i = currentLevel; i > prevLevel; i -= 1) {
-    result.push(`  ${setSpaces(i - 1)}}`);
-  }
-  return result;
+const setClosingBracket = (nextLevel, currentLevel) => {
+  if (nextLevel >= currentLevel) return [];
+  const result = new Array(currentLevel - nextLevel).fill(0);
+  return result.map((_, index) => `  ${setSpaces(currentLevel - index - 1)}}`);
 };
 
 const primitiveToString = (value) => {
@@ -32,36 +30,35 @@ const valueToString = (value, level) => {
     if (isObject(value[key])) return [...acc, `  ${spaces}${key}: ${valueToString(value[key], level + 1)}`];
     return [...acc, `  ${spaces}${key}: ${value[key]}`];
   }, ['{']);
-  result.push(`  ${setSpaces(level - 1)}}`);
 
-  return result.join('\n');
+  return [...result, `  ${setSpaces(level - 1)}}`].join('\n');
 };
 
 export default (diffTree) => {
-  const result = ['{'];
-  for (let i = 0; i < diffTree.length; i += 1) {
-    const currentNode = diffTree[i];
-    const nextLevel = diffTree[i + 1]?.level ?? null;
+  const result = diffTree.reduce((acc, currentNode, index) => {
+    const nextLevel = diffTree[index + 1]?.level ?? null;
     const spaces = setSpaces(currentNode.level);
 
     const value1 = valueToString(currentNode.value, currentNode.level + 1);
     const value2 = valueToString(currentNode.value2, currentNode.level + 1);
 
+    const closingBrackets = setClosingBracket(nextLevel, currentNode.level);
+
     if (currentNode.type === 'nested') {
-      result.push(`${spaces}  ${currentNode.key}: {`);
-    } else if (currentNode.type === 'none') {
-      result.push(`${spaces}  ${currentNode.key}: ${value1}`);
-    } else if (currentNode.type === 'changed') {
+      return [...acc, `${spaces}  ${currentNode.key}: {`, ...closingBrackets];
+    } if (currentNode.type === 'none') {
+      return [...acc, `${spaces}  ${currentNode.key}: ${value1}`, ...closingBrackets];
+    } if (currentNode.type === 'changed') {
       const bothArrays = Array.isArray(currentNode.value) && Array.isArray(currentNode.value2);
-      result.push(`${spaces}${bothArrays ? ' ' : '-'} ${currentNode.key}: ${value1}`);
-      result.push(`${spaces}${bothArrays ? ' ' : '+'} ${currentNode.key}: ${value2}`);
-    } else {
-      result.push(`${spaces}${currentNode.type} ${currentNode.key}: ${value1}`);
+      return [
+        ...acc,
+        `${spaces}${bothArrays ? ' ' : '-'} ${currentNode.key}: ${value1}`,
+        `${spaces}${bothArrays ? ' ' : '+'} ${currentNode.key}: ${value2}`,
+        ...closingBrackets,
+      ];
     }
-    if (nextLevel < currentNode.level) {
-      result.push(...setClosingBracket(nextLevel, currentNode.level));
-    }
-  }
-  result.push('}');
-  return result.join('\n');
+    return [...acc, `${spaces}${currentNode.type} ${currentNode.key}: ${value1}`, ...closingBrackets];
+  }, ['{']);
+
+  return [...result.filter((item) => item !== null), '}'].join('\n');
 };

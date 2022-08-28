@@ -1,6 +1,6 @@
 import * as path from 'path';
 import {
-  getFullPath, safelyParseJson, sortStrings, getFileExtension, isObject, uniq,
+  getFullPath, safelyParseJson, getFileExtension, isObject,
 } from '../src/helpers.js';
 
 describe('helpers tests', () => {
@@ -19,12 +19,6 @@ describe('helpers tests', () => {
     expect(() => { safelyParseJson(json); }).toThrow(Error);
   });
 
-  it('should test sortStrings func', () => {
-    const strings = ['some string', 'another string'];
-    strings.sort(sortStrings);
-    expect(strings).toEqual(['another string', 'some string']);
-  });
-
   it('should test getFileExtension func', () => {
     const file1 = '../src/test/test.json';
     const file2 = './src/test/test.yml';
@@ -41,12 +35,5 @@ describe('helpers tests', () => {
     expect(isObject({})).toBe(true);
     expect(isObject(() => {})).toBe(false);
     expect(isObject(undefined)).toBe(false);
-  });
-
-  it('should test uniq func', () => {
-    expect(uniq([1, 2])).toEqual([1, 2]);
-    expect(uniq([1, 2, 2])).toEqual([1, 2]);
-    expect(uniq([2, 2, 2])).toEqual([2]);
-    expect(uniq([])).toEqual([]);
   });
 });

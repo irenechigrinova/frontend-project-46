@@ -7,10 +7,13 @@ const setValue = (value) => {
 };
 
 export default (diffTree) => {
-  let currentPath = [];
+  const currentPath = [];
 
   return diffTree.reduce((result, item, index) => {
-    if (item.level === 0) currentPath = [item.key];
+    if (item.level === 0) {
+      currentPath.length = 0;
+      currentPath[0] = item.key;
+    }
 
     const value1 = setValue(item.value);
     const value2 = setValue(item.value2);
@@ -18,16 +21,17 @@ export default (diffTree) => {
     const nextItemLevel = diffTree[index + 1]?.level ?? null;
 
     if (item.type === 'nested' && !currentPath.includes(item.key)) {
-      currentPath.push(item.key);
-    } else if (item.type === 'changed') {
-      result.push(`Property '${propName}' was updated. From ${value1} to ${value2}`);
-    } else if (item.type === '+') {
-      result.push(`Property '${propName}' was added with value: ${value1}`);
-    } else if (item.type === '-') {
-      result.push(`Property '${propName}' was removed`);
+      currentPath[currentPath.length] = item.key;
     }
     if (nextItemLevel < item.level) {
-      currentPath.pop();
+      currentPath.length -= 1;
+    }
+    if (item.type === 'changed') {
+      return [...result, `Property '${propName}' was updated. From ${value1} to ${value2}`];
+    } if (item.type === '+') {
+      return [...result, `Property '${propName}' was added with value: ${value1}`];
+    } if (item.type === '-') {
+      return [...result, `Property '${propName}' was removed`];
     }
     return result;
   }, []).join('\n');
