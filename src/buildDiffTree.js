@@ -1,5 +1,5 @@
-import uniq from 'lodash/uniq';
-import sortBy from 'lodash/sortBy';
+import uniq from 'lodash/uniq.js';
+import sortBy from 'lodash/sortBy.js';
 import { isObject } from './helpers.js';
 
 const getKeys = (obj1, obj2) => sortBy(uniq([...Object.keys(obj1), ...Object.keys(obj2)]));
