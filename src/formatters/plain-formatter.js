@@ -6,33 +6,41 @@ const setValue = (value) => {
   return value;
 };
 
-export default (diffTree) => {
-  const currentPath = [];
+const setPath = (item, path, nextItemLevel) => {
+  if (item.level === 0) return [item.key];
+  if (item.type === 'nested' && !path.includes(item.key)) {
+    return [...path, item.key];
+  }
+  if (nextItemLevel < item.level) return path.filter((_item, index) => index < path.length - 1);
 
-  return diffTree.reduce((result, item, index) => {
-    if (item.level === 0) {
-      currentPath.length = 0;
-      currentPath[0] = item.key;
-    }
-
-    const value1 = setValue(item.value);
-    const value2 = setValue(item.value2);
-    const propName = item.level > 0 ? `${currentPath.join('.')}.${item.key}` : item.key;
-    const nextItemLevel = diffTree[index + 1]?.level ?? null;
-
-    if (item.type === 'nested' && !currentPath.includes(item.key)) {
-      currentPath[currentPath.length] = item.key;
-    }
-    if (nextItemLevel < item.level) {
-      currentPath.length -= 1;
-    }
-    if (item.type === 'changed') {
-      return [...result, `Property '${propName}' was updated. From ${value1} to ${value2}`];
-    } if (item.type === '+') {
-      return [...result, `Property '${propName}' was added with value: ${value1}`];
-    } if (item.type === '-') {
-      return [...result, `Property '${propName}' was removed`];
-    }
-    return result;
-  }, []).join('\n');
+  return path;
 };
+
+export default (diffTree) => diffTree.reduce((result, item, index) => {
+  const value1 = setValue(item.value);
+  const value2 = setValue(item.value2);
+  const propName = item.level > 0 ? `${result.currentPath.join('.')}.${item.key}` : item.key;
+  const nextItemLevel = diffTree[index + 1]?.level ?? null;
+  const currentPath = setPath(item, result.currentPath, nextItemLevel);
+
+  if (item.type === 'changed') {
+    return {
+      ...result,
+      strings: [...result.strings, `Property '${propName}' was updated. From ${value1} to ${value2}`],
+      currentPath,
+    };
+  } if (item.type === '+') {
+    return {
+      ...result,
+      strings: [...result.strings, `Property '${propName}' was added with value: ${value1}`],
+      currentPath,
+    };
+  } if (item.type === '-') {
+    return {
+      ...result,
+      strings: [...result.strings, `Property '${propName}' was removed`],
+      currentPath,
+    };
+  }
+  return { ...result, currentPath };
+}, { strings: [], currentPath: [] }).strings.join('\n');
