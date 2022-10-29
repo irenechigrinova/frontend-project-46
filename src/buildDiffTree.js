@@ -13,9 +13,8 @@ const buildDiffTree = (obj1, obj2) => {
 
     switch (true) {
       case value1 === value2:
-        return {
-          key, value: value1, type: 'none',
-        };
+        return { key, value: value1, type: 'none' };
+
       case isPlainObject(value1) && isPlainObject(value2):
         return {
           key,
@@ -23,10 +22,12 @@ const buildDiffTree = (obj1, obj2) => {
           type: 'nested',
           children: buildDiffTree(value1, value2),
         };
+
       case typeof value1 !== 'undefined' && typeof value2 !== 'undefined':
         return {
           key, value: value1, value2, type: 'changed',
         };
+
       default:
         return {
           key, value: value1 ?? value2, type: typeof value1 !== 'undefined' ? 'deleted' : 'added',
