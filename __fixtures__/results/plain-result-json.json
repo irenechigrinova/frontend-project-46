@@ -1,3 +1,3 @@
 {
-  "value": "[{\"key\":\"follow\",\"value\":false,\"type\":\"-\",\"level\":0},{\"key\":\"host\",\"value\":\"hexlet.io\",\"level\":0,\"type\":\"none\"},{\"key\":\"proxy\",\"value\":\"123.234.53.22\",\"type\":\"-\",\"level\":0},{\"key\":\"timeout\",\"value\":50,\"value2\":20,\"type\":\"changed\",\"level\":0},{\"key\":\"verbose\",\"value\":true,\"type\":\"+\",\"level\":0}]"
+  "value": "[{\"key\":\"follow\",\"value\":false,\"type\":\"deleted\"},{\"key\":\"host\",\"value\":\"hexlet.io\",\"type\":\"none\"},{\"key\":\"proxy\",\"value\":\"123.234.53.22\",\"type\":\"deleted\"},{\"key\":\"timeout\",\"value\":50,\"value2\":20,\"type\":\"changed\"},{\"key\":\"verbose\",\"value\":true,\"type\":\"added\"}]"
 }

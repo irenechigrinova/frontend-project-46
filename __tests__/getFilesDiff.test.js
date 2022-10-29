@@ -27,7 +27,9 @@ describe('getDiff tests', () => {
   ])('should test getDiff for %s and %s with %s formatter', async (testFile1, testFile2, expected, format) => {
     const content = readFileSync(getPathToFixture('results', expected), { encoding: 'utf8' });
     const result = safelyParseJson(content).value;
-    const diff = getDiff(getPathToFixture('test-data', testFile1), getPathToFixture('test-data', testFile2), format);
+    const file1 = getPathToFixture('test-data', testFile1);
+    const file2 = getPathToFixture('test-data', testFile2);
+    const diff = getDiff(file1, file2, format);
     expect(diff).toEqual(result);
   });
 });

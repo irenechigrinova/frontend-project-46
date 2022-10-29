@@ -1,3 +1,3 @@
 {
-  "value": "[{\"key\":\"ecmaVersion\",\"value\":\"latest\",\"level\":0,\"type\":\"none\"},{\"key\":\"extends\",\"value\":\"airbnb-base\",\"value2\":\"airbnb-base-1\",\"type\":\"changed\",\"level\":0},{\"key\":\"no-console\",\"value\":0,\"value2\":1,\"type\":\"changed\",\"level\":0}]"
+  "value": "[{\"key\":\"ecmaVersion\",\"value\":\"latest\",\"type\":\"none\"},{\"key\":\"extends\",\"value\":\"airbnb-base\",\"value2\":\"airbnb-base-1\",\"type\":\"changed\"},{\"key\":\"no-console\",\"value\":0,\"value2\":1,\"type\":\"changed\"}]"
 }

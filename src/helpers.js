@@ -11,5 +11,3 @@ export const safelyParseJson = (str) => {
 };
 
 export const getFileExtension = (filepath) => path.extname(filepath).substring(1);
-
-export const isObject = (entity) => !!entity && typeof entity === 'object' && !Array.isArray(entity);

@@ -1,6 +1,6 @@
 import * as path from 'path';
 import {
-  getFullPath, safelyParseJson, getFileExtension, isObject,
+  getFullPath, safelyParseJson, getFileExtension,
 } from '../src/helpers.js';
 
 describe('helpers tests', () => {
@@ -27,13 +27,5 @@ describe('helpers tests', () => {
     expect(getFileExtension(file1)).toBe('json');
     expect(getFileExtension(file2)).toBe('yml');
     expect(getFileExtension(file3)).toBe('yaml');
-  });
-
-  it('should test isObject func', () => {
-    expect(isObject([])).toBe(false);
-    expect(isObject('')).toBe(false);
-    expect(isObject({})).toBe(true);
-    expect(isObject(() => {})).toBe(false);
-    expect(isObject(undefined)).toBe(false);
   });
 });

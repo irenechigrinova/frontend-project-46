@@ -1,35 +1,38 @@
 import uniq from 'lodash/uniq.js';
 import sortBy from 'lodash/sortBy.js';
-import { isObject } from './helpers.js';
+import isPlainObject from 'lodash/isPlainObject.js';
 
 const getKeys = (obj1, obj2) => sortBy(uniq([...Object.keys(obj1), ...Object.keys(obj2)]));
 
-export default (content1, content2) => {
-  function buildFlatTree(obj1, obj2, level) {
-    const keys = getKeys(obj1, obj2);
+const buildDiffTree = (obj1, obj2) => {
+  const keys = getKeys(obj1, obj2);
 
-    return keys.reduce((acc, key) => {
-      if (obj1[key] === obj2[key]) {
-        return [...acc, {
-          key, value: obj1[key], level, type: 'none',
-        }];
-      } if (isObject(obj1[key]) && isObject(obj2[key])) {
-        return [...acc, {
+  return keys.map((key) => {
+    const value1 = obj1[key];
+    const value2 = obj2[key];
+
+    switch (true) {
+      case value1 === value2:
+        return {
+          key, value: value1, type: 'none',
+        };
+      case isPlainObject(value1) && isPlainObject(value2):
+        return {
           key,
           value: null,
-          level,
           type: 'nested',
-        }, ...buildFlatTree(obj1[key], obj2[key], level + 1)];
-      } if (typeof obj1[key] !== 'undefined' && typeof obj2[key] !== 'undefined') {
-        return [...acc, {
-          key, value: obj1[key], value2: obj2[key], type: 'changed', level,
-        }];
-      }
-      return [...acc, {
-        key, value: obj1[key] ?? obj2[key], type: typeof obj1[key] !== 'undefined' ? '-' : '+', level,
-      }];
-    }, []);
-  }
-
-  return buildFlatTree(content1, content2, 0);
+          children: buildDiffTree(value1, value2),
+        };
+      case typeof value1 !== 'undefined' && typeof value2 !== 'undefined':
+        return {
+          key, value: value1, value2, type: 'changed',
+        };
+      default:
+        return {
+          key, value: value1 ?? value2, type: typeof value1 !== 'undefined' ? 'deleted' : 'added',
+        };
+    }
+  });
 };
+
+export default buildDiffTree;
